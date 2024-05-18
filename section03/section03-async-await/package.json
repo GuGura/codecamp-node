@@ -1,0 +1,10 @@
+{
+  "name": "section03-async-await",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "axios": "^1.6.8"
+  }
+}
