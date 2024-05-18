@@ -1,17 +1,34 @@
-import { ApolloServer } from '@apollo/server';
+import { ApolloServer} from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
 
 // The GraphQL schema
 const typeDefs = `#graphql
+  input CreateBoardInput {
+    writer: String
+    title: String
+    contents: String
+  }
+  type MyResult {
+    number: Int
+    write: String
+    title: String
+    contents: String
+  }
+
   type Query {
-    phone: String
+#    fetchBoards: MyResult #  객체 1개를 의미!
+    fetchBoards: [MyResult] # 배열 안에 객체 1개 이상을 의미!
+  }
+  type Mutation {
+#    createBoard(writer:String, title:String, contents:String): String
+    createBoard(createBoardInput: CreateBoardInput!): String
   }
 `;
 
 // A map of functions which return data for the schema.
 const resolvers = {
     Query: {
-        fetchBoards: (parent, args, context, info) => {
+        fetchBoards: (_, args, context, info) => {
             // 1. DB에 접속 후, 데이터를 조회 => 데이터를 조회했다고 가정
             const result = [
                 { number: 1, write: "철수", title: "제목입니다~~", contents: "내용이에요~~" },
@@ -23,11 +40,12 @@ const resolvers = {
         },
     },
     Mutation: {
-        createBoard: (parent, args, context, info) => {
+        createBoard: (_, args) => {
             // 1. 브라우저에서 보내준 데이터 확인하기
-            console.log(args)
+            console.log(args.createBoardInput.writer)
+            console.log(args.createBoardInput.title)
+            console.log(args.createBoardInput.contents)
             console.log("====================================");
-            console.log(args.body)
 
             // 2. DB에 접속 후, 데이터를 저장 => 데이터 저장했다고 가정
 
