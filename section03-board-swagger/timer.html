@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+   
+</head>
+<body>
+    <h3>회원가입</h3>
+        <div class="wrapper">
+            <input type="email"/>
+            <div>
+                <input />
+                <button id="button">인증번호 받기</button>
+            </div>
+            <div>
+                <input/>
+                <div id="timer"></div>
+            </div>
+        </div>
+        <script>
+            const div = document.querySelector('#timer')
+            const button = document.querySelector('button')
+            let time = 180;
+            let timer;
+            button.onclick = ()=>{
+                clearInterval(timer)
+                time = 180;
+                timer = setInterval(function(){
+                    time = time -1
+                    const minute =Math.floor(time/60)
+                    const seconed = time%60 < 10 ? String(time%60).padStart(2,"0"): String(time%60)
+                    div.innerHTML = minute + " : " +seconed;
+                    if(time === 0){
+                        clearInterval(timer)
+                        button.disabled =true
+                    }
+                },1000)
+            }
+        </script>
+</body>
+</html>

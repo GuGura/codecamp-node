@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입 연습하기</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        function zzz(){
+            // 1.입력한 휴대폰 번호 가져오기
+            const myphone = document.getElementById('myphone').value
+           
+            // 2.해당 휴대폰번호로 인증된API 요청하기 (fetch, axios)
+            window.axios.post('http://localhost:3000/tokens/phone',{
+                phone: myphone
+            }).then(res=>{
+                console.log(res.data);
+                document.getElementById('result').innerText = res.data
+            })
+        }
+    </script>
+</head>
+<body>
+    휴대폰번호: <input id="myphone" type="text"/> <button onclick="zzz()">인증하기</button>
+    <div id="result">인증상태</div>
+    <button>회원가입하기</button>
+</body>
+</html>
