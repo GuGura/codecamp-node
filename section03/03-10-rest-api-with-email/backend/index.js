@@ -61,6 +61,7 @@ app.post('/users', function (req, res) {
 
   const template = getWelcomeTemplate({name, age, school});
   sendTemplateToEmail(email, template);
+  res.send('이메일 전송에 성공하였습니다.')
 })
 
 app.listen(port, () => {
