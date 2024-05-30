@@ -1,0 +1,34 @@
+version: '3.7'
+
+# 컴퓨터들
+#services:
+#  내백엔드컴퓨터:
+#    build:
+#      파일경로: .
+#      파일명: Dockerfile
+#  내데이터베이스컴퓨터:
+#    build:
+#      파일경로: .
+#      파일명: Dockerfile.mongo
+
+# 컴퓨터들
+services:
+
+  # 컴퓨터이름
+  my-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./index.js:/myfolder/index.js
+      - ./email.js:/myfolder/email.js
+      # - ./src:/myfolder/src
+    ports:
+      - "6678:4000"
+
+  # 컴퓨터이름
+  my-database:
+    image: mongo:5
+    ports:
+      - "27017:27017"
+
