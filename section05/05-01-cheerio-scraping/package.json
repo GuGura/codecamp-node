@@ -1,0 +1,11 @@
+{
+  "name": "05-01-cheerio-scraping",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.7.2",
+    "cheerio": "^1.0.0-rc.12"
+  }
+}
