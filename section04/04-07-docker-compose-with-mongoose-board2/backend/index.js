@@ -37,11 +37,26 @@ app.post('/boards', async (req, res) => {
 
   // 2. DB에 접속 후, 데이터를 저장 => 데이터 저장했다고 가정
   const board = new Board({
-    write: req.body.write,
+    writer: req.body.writer,
     title: req.body.title,
     contents: req.body.contents
   })
 
+  await board.save()
+
+  // 3. DB에 저장된 결과를 브라우저에 응답(response) 추가
+  res.send('게시물 등록에 성공하였습니다.')
+})
+
+app.put('/boards', async (req, res) => {
+  // 1. 브라우저에서 보내준 데이터 확인하기
+  console.log(req)
+  console.log("===========================");
+  console.log(req.body)
+
+  // 2. DB에 접속 후, 데이터를 저장 => 데이터 저장했다고 가정
+  const board = await Board.findOne({title:"재연아카데미"})
+  board.contents = ['변경!!']
   await board.save()
 
   // 3. DB에 저장된 결과를 브라우저에 응답(response) 추가
