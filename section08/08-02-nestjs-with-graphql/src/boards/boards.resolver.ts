@@ -1,10 +1,11 @@
 import { BoardsService } from './boards.service';
+import { Query, Resolver } from '@nestjs/graphql';
 
-// @Controller()
+@Resolver()
 export class BoardsResolver {
   constructor(private readonly boardsService: BoardsService) {}
 
-  // @Get('/products/buy')
+  @Query()
   getHello(): string {
     return this.boardsService.qqq();
   }
