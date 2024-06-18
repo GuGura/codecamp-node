@@ -3,5 +3,5 @@
 # ------------------------------------------------------
 
 type Query {
-  getHello: String!
+  fetchBoards: String
 }

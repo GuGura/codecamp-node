@@ -5,8 +5,8 @@ import { Query, Resolver } from '@nestjs/graphql';
 export class BoardsResolver {
   constructor(private readonly boardsService: BoardsService) {}
 
-  @Query(() => String)
-  getHello(): string {
+  @Query(() => String, { nullable: true })
+  fetchBoards(): string {
     return this.boardsService.qqq();
   }
 }
