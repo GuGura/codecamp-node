@@ -90,6 +90,7 @@ app.post('/users', function (req, res) {
   res.send('이메일 전송에 성공하였습니다.')
 })
 
+mongoose.set('debug', true)
 
 mongoose.connect('mongodb://my-database/mydocker')
         .then(() => console.log('db 접속에 성공하셨습니다.'))
