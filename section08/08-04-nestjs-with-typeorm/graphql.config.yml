@@ -1,0 +1,11 @@
+projects:
+  section08:
+    schema: ./src/**/*.graphql
+    documents: ./src/**/*.graphql
+    extensions:
+      codegen:
+        generates:
+          ./src/generated/graphql.ts:
+            plugins:
+              - typescript
+              - typescript-resolvers

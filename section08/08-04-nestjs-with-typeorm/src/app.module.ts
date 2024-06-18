@@ -1,0 +1,33 @@
+import { Module } from '@nestjs/common';
+
+import { BoardsModule } from './apis/boards/boards.module';
+import { UsersModule } from './apis/users/users.module';
+import { ProductsModule } from './apis/products/products.module';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Board } from './apis/boards/entities/board.entity';
+
+@Module({
+  imports: [
+    BoardsModule,
+    UsersModule,
+    ProductsModule,
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: 'src/commons/graphql/schema.gql',
+    }),
+    TypeOrmModule.forRoot({
+      type:'mysql',
+      host:'localhost', // docker로 진행할땐 name relation으로 연결할 수 있기에 docker 이름을 적으면 된다.
+      port: 3306,
+      username: 'root',
+      password: '1234',
+      database: 'myproject', 
+      entities: [Board], // 테이블들을 넣으면 된다.
+      synchronize: true, // 동기화 시켜줘
+      logging: true // ORM이 원시Query로 매핑되서 실행되는데 그 원시Query 노출 여부
+    })
+  ],
+})
+export class AppModule {}
