@@ -1,5 +1,6 @@
 import { Injectable, Scope } from '@nestjs/common';
 import { Board } from './entities/board.entity';
+import { IBoardServiceCreate } from './interfaces/boards-service.interface';
 
 /*
 @Injectable() 있으나 없으나 module에서 providers에 추가함으로써
@@ -37,11 +38,11 @@ export class BoardsService {
     return result;
   }
 
-  create(writer: string, title: string, contents: string) {
+  create({ createBoardInput }: IBoardServiceCreate) {
     // 1. 브라우저에서 보내준 데이터 확인하기
-    console.log(writer);
-    console.log(title);
-    console.log(contents);
+    console.log(createBoardInput.writer);
+    console.log(createBoardInput.title);
+    console.log(createBoardInput.contents);
     console.log('====================================');
 
     // 2. DB에 접속 후, 데이터를 저장 => 데이터 저장했다고 가정

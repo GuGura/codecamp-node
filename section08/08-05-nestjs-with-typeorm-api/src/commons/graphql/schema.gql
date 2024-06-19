@@ -14,5 +14,11 @@ type Query {
 }
 
 type Mutation {
-  createBoard(writer: String!, title: String!, contents: String!): String!
+  createBoard(createBoardInput: CreateBoardInput!): String!
+}
+
+input CreateBoardInput {
+  title: String!
+  contents: String!
+  writer: String!
 }
