@@ -1,0 +1,38 @@
+version: '3.7'
+
+# 컴퓨터들
+#services:
+#  내백엔드컴퓨터:
+#    build:
+#      파일경로: .
+#      파일명: Dockerfile
+#  내데이터베이스컴퓨터:
+#    build:
+#      파일경로: .
+#      파일명: Dockerfile.mongo
+
+# 컴퓨터들
+services:
+
+  # 컴퓨터이름
+  my-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./src:/myfolder/src # src폴더를 컨테이너의 /myfolder/src로 연결
+    ports:
+      - 3000:3000
+    env_file:
+      - ./.env.docker
+
+  # 컴퓨터이름
+  my-database:
+#    platform: linux/x86_64  # cup문제로 안되는 경우 추가
+    image: mysql:latest
+    environment: #환경설정
+      MYSQL_DATABASE: 'mydocker' #시작하자마자 만들어질 데이터베이스 이름
+      MYSQL_ROOT_PASSWORD: 1234 #루트 비밀번호
+    ports:
+      - 8888:3306
+
