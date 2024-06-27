@@ -1,0 +1,79 @@
+show databases
+;
+
+use myproject
+;
+
+show tables
+;
+
+desc product
+;
+
+select *
+    from product
+;
+
+# MYSQL에서는 문자열을 사용할 때 큰따옴표(") 와 작은 따옴표(')의 큰 차이가 없으나 다른 SQL DB는 대부분 작은 따옴표(')를 사용
+insert into product(id,name,description,price)
+    values (uuid(),'마우스','정말 좋은 마우스입니다!!', 15000)
+;
+
+insert into product(id,name,description,price)
+    values (uuid(),'노트북','최신맥북!!', 20000)
+;
+
+insert into product (id, name,description,price)
+    values(uuid(),'셔츠','깔끔한 셔츠입니다.', 30000)
+;
+
+delete from product
+    where name = '셔츠'
+;
+
+update product
+    set price = 18000
+where name = '마우스'
+;
+
+#=======조인=========
+select *
+    from product_sales_location
+;
+
+insert into
+    product_sales_location (id, address, addressDetail, lat,lng, meetingTime)
+values(uuid(), '구로구', '구로디지털단지',37.281723, 127.192387,'2023-01-10')
+;
+
+update product
+    set productSalesLocationsId = '2b747b69-347c-11ef-9a21-0242ac110005'
+where name = '마우스'
+;
+
+select p.id, name, price, address, addressDetail
+from product p, product_sales_location ps
+where p.productSalesLocationsId = ps.id
+;
+
+#=======추가 기능=======
+update product
+set isSoldOut = true
+where name = '노트북'
+and price = 20000
+;
+
+update product
+set isSoldOut = true
+where name = '노트북'
+or price = 20000
+;
+
+#===============주석 쉽게 다는 방법==================
+select *
+    from product
+where true
+    and name = '마우스'
+-- and price = 5000
+-- and isSoldOut = false
+;
