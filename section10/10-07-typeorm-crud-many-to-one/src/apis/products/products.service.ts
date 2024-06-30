@@ -21,14 +21,14 @@ export class ProductsService {
 
   findAll(): Promise<Product[]> {
     return this.productsRepository.find({
-      relations: ['productSalesLocations'],
+      relations: ['productSalesLocations', 'productCategory'],
     });
   }
 
   findOne({ productId }: IProductsServiceFindOne): Promise<Product> {
     return this.productsRepository.findOne({
       where: { id: productId },
-      relations: ['productSalesLocations'],
+      relations: ['productSalesLocations', 'productCategory'],
     });
   }
 
@@ -45,7 +45,8 @@ export class ProductsService {
     // });
 
     // 2. 상품과 상품거래위치를 같이 등록하는 방법
-    const { productSalesLocation, ...product } = createProductInput;
+    const { productSalesLocation, productCategoryId, ...product } =
+      createProductInput;
 
     // 분리 안하면 문제점 : productSalesLocation에 데이터를 저장할 때 로직들이 통일이 안됨. if문으로 매번 다르게 검증을 해야함.
     // 저장뿐만 아니라 검증도 중요하다. 그래서 service에 로직을 분리함.
@@ -56,6 +57,12 @@ export class ProductsService {
       ...product,
       // result 통째로 넣기 vs id만 빼서 넣기(id만 넣으면, 다른 정보를 조회할 수 없음)
       productSalesLocations: { ...result },
+      productCategory: {
+        id: productCategoryId,
+        // 만약에 name 까지 받고 싶으면?
+        // => createProductInput에 name 까지 포함해서 받아야함.
+        // 브라우저가 name을 알고 있기 때문에 선택사항이고 알아서 판단해라.
+      },
     });
     return result2;
   }

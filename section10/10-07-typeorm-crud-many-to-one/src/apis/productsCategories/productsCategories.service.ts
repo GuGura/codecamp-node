@@ -14,4 +14,10 @@ export class ProductsCategoriesService {
   create({ name }: IProductsCategoriesServiceCreate): Promise<ProductCategory> {
     return this.productsCategoriesRepository.save({ name });
   }
+
+  findOne({ categoryId }: { categoryId: string }): Promise<ProductCategory> {
+    return this.productsCategoriesRepository.findOne({
+      where: { id: categoryId },
+    });
+  }
 }

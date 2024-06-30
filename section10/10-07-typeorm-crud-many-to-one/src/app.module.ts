@@ -8,6 +8,7 @@ import * as process from 'process';
 import { ConfigModule } from '@nestjs/config';
 import { ProductsModule } from './apis/products/products.module';
 import { ProductsSalesLocationsModule } from './apis/productsSalesLocations/productsSalesLocations.module';
+import { ProductsCategoriesModule } from './apis/productsCategories/productsCategories.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ProductsSalesLocationsModule } from './apis/productsSalesLocations/prod
     // UsersModule,
     ProductsModule,
     ProductsSalesLocationsModule,
+    ProductsCategoriesModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: 'src/commons/graphql/schema.gql',
