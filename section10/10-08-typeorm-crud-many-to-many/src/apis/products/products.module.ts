@@ -4,6 +4,7 @@ import { ProductsService } from './products.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
 import { ProductsSalesLocationsModule } from '../productsSalesLocations/productsSalesLocations.module';
+import { ProductTagsModule } from '../productsTags/productTags.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { ProductsSalesLocationsModule } from '../productsSalesLocations/products
       Product, // repository
     ]),
     ProductsSalesLocationsModule,
+    ProductTagsModule,
   ],
   providers: [ProductsResolver, ProductsService],
 })

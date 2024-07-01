@@ -9,6 +9,7 @@ import { ConfigModule } from '@nestjs/config';
 import { ProductsModule } from './apis/products/products.module';
 import { ProductsSalesLocationsModule } from './apis/productsSalesLocations/productsSalesLocations.module';
 import { ProductsCategoriesModule } from './apis/productsCategories/productsCategories.module';
+import { ProductTagsModule } from './apis/productsTags/productTags.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ProductsCategoriesModule } from './apis/productsCategories/productsCate
     ProductsModule,
     ProductsSalesLocationsModule,
     ProductsCategoriesModule,
+    ProductTagsModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: 'src/commons/graphql/schema.gql',

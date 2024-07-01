@@ -21,5 +21,5 @@ export class CreateProductInput {
   productCategoryId: string;
 
   @Field(() => [String])
-  productTags: string;
+  productTags: string[];
 }

@@ -10,6 +10,7 @@ import {
   IProductsServiceUpdate,
 } from './interfaces/products-service.interface';
 import { ProductsSalesLocationsService } from '../productsSalesLocations/productsSalesLocations.service';
+import { ProductTagsService } from '../productsTags/productTags.service';
 
 @Injectable()
 export class ProductsService {
@@ -17,6 +18,7 @@ export class ProductsService {
     @InjectRepository(Product)
     private readonly productsRepository: Repository<Product>, //
     private readonly productsSalesLocationsService: ProductsSalesLocationsService,
+    private readonly productTagsService: ProductTagsService,
   ) {}
 
   findAll(): Promise<Product[]> {
@@ -36,14 +38,22 @@ export class ProductsService {
     createProductInput,
   }: IProductsServiceCreate): Promise<Product> {
     // 2. 상품과 상품거래위치를 같이 등록하는 방법
-    const { productSalesLocation, productCategoryId, ...product } =
+    const { productSalesLocation, productCategoryId, productTags, ...product } =
       createProductInput;
 
-    // 분리 안하면 문제점 : productSalesLocation에 데이터를 저장할 때 로직들이 통일이 안됨. if문으로 매번 다르게 검증을 해야함.
-    // 저장뿐만 아니라 검증도 중요하다. 그래서 service에 로직을 분리함.
+    // 2-1) 상품거래위치 등록
     const result = await this.productsSalesLocationsService.create({
       productSalesLocation,
-    });
+    }); // 서비스를 타고 가야 하는 이유는...?
+    //  // 분리 안하면 문제점 : productSalesLocation에 데이터를 저장할 때 로직들이 통일이 안됨. if문으로 매번 다르게 검증을 해야함.
+    //  // 저장뿐만 아니라 검증도 중요하다. 그래서 service에 로직을 분리함.
+
+    // 2-2) 상품태그 등록
+    // productTag가 ["#전자제품","#영등포",'#컴퓨터"]와 같은 패턴이라고 가정
+    const tagNames = productTags.map((el) => el.replace('#', ''));
+    const newTags = this.productsTagsRepository.insert(tagNames); // bulk-insert(한번에 여러개의 데이터를 넣는 것)는 save()로 불가능
+    newTags.identifiers; // 새로 생성된 데이터의 id를 반환
+
     const result2 = this.productsRepository.save({
       ...product,
       // result 통째로 넣기 vs id만 빼서 넣기(id만 넣으면, 다른 정보를 조회할 수 없음)
@@ -51,6 +61,7 @@ export class ProductsService {
       productCategory: {
         id: productCategoryId,
       },
+      productTags: newTags.identifiers,
     });
     return result2;
   }
@@ -58,19 +69,21 @@ export class ProductsService {
   async update({
     productId,
     updateProductInput,
-  }: IProductsServiceUpdate): Promise<Product> {
+  }: IProductsServiceUpdate): Promise<void> {
     // 기존 있는 내용을 재사용하여, 로직을 통일하자!!
     const product = await this.findOne({ productId });
 
     // 검증은 서비스에서 하자!!
     this.checkSoldOut({ product });
 
-    const result = this.productsRepository.save({
-      ...product, // 수정 후, 수정되지 않은 다른 결과값까지 모두 객체로 반환 받고 싶을 때
-      ...updateProductInput, // 스프레드 문법을 사용하여 객체를 합칠 수 있다.
-    });
-
-    return result;
+    // 숙제-1) 왜 아래 에러가 발생하는지 고민해보기
+    // 숙제-2) 아래 에러 고쳐보기
+    // const result = this.productsRepository.save({
+    //   ...product, // 수정 후, 수정되지 않은 다른 결과값까지 모두 객체로 반환 받고 싶을 때
+    //   ...updateProductInput, // 스프레드 문법을 사용하여 객체를 합칠 수 있다.
+    // });
+    //
+    // return result;
   }
 
   // checkSoldOut 함수로 만드는 이유 => 수정시, 삭제시 등 같은 검증 로직 사용
