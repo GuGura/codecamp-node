@@ -51,6 +51,20 @@ export class ProductsService {
     // 2-2) 상품태그 등록
     // productTag가 ["#전자제품","#영등포",'#컴퓨터"]와 같은 패턴이라고 가정
     const tagNames = productTags.map((el) => el.replace('#', ''));
+    // 기존 상품에 등록된 태그 중, 새로 등록할 태그만 필터링
+    const prevTags = await this.productTagsService.find({
+      where: { name: In(tagNames) },
+    });
+
+    // 새로 등록할 태그만 필터링
+    const temp = []; // [{name:'영등포'}]
+    tagNames.forEach((tagName) => {
+      const isExist = prevTags.find((prevTag) => prevTag.name === tagName);
+      if (!isExist) {
+        temp.push(tagName);
+      }
+    });
+
     const newTags = this.productsTagsRepository.insert(tagNames); // bulk-insert(한번에 여러개의 데이터를 넣는 것)는 save()로 불가능
     newTags.identifiers; // 새로 생성된 데이터의 id를 반환
 
